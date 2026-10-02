@@ -1,0 +1,12 @@
+<section>
+  <h2>Zoznam kníh</h2>
+
+  @for (book of books; track book.id; let i = $index, count = $count) {
+    @if (i === 0) {
+      <p>V zozname sú spolu {{ count }} knihy.</p>
+    }
+    <app-book-card [book]="book"></app-book-card>
+  } @empty {
+    <p>V knižnici zatiaľ nie sú žiadne knihy.</p>
+  }
+</section>
