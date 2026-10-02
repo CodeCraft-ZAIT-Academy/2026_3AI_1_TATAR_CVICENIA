@@ -11,16 +11,31 @@
   }
 
   <div class="pagination">
+    <button matButton="outlined" (click)="firstPage()" [disabled]="currentPage === 1">
+      Prvá strana
+    </button>
+
     <button matButton="outlined" (click)="previousPage()" [disabled]="currentPage === 1">
       <mat-icon>chevron_left</mat-icon>
       Predošlá
     </button>
 
-    <span>Strana {{ currentPage }} z {{ pageCount() }}</span>
+    @for (page of pages(); track page) {
+      <button 
+        matButton="outlined" 
+        (click)="currentPage = page" 
+        [class.active]="page === currentPage">
+        {{ page }}
+      </button>
+    }
 
     <button matButton="outlined" (click)="nextPage()" [disabled]="currentPage === pageCount()">
       Ďalšia
       <mat-icon iconPositionEnd>chevron_right</mat-icon>
+    </button>
+
+    <button matButton="outlined" (click)="lastPage()" [disabled]="currentPage === pageCount()">
+      Posledná strana
     </button>
   </div>
 </section>

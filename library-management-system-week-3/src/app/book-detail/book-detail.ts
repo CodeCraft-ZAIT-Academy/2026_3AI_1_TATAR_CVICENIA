@@ -12,4 +12,6 @@ import { Book } from '../book';
 })
 export class BookDetail {
   book = input.required<Book>();
+
+  stars: number[] = [1, 2, 3, 4, 5];
 }

@@ -18,7 +18,13 @@
 
   <p>
     <mat-icon>star_rate</mat-icon>
-    Hodnotenie: {{ book().rating }} / 5
+    Hodnotenie: @for (star of stars; track star) {
+    @if (star <= book().rating) {
+        <mat-icon style="color: gold; font-variation-settings: 'FILL' 1">star</mat-icon>
+    } @else {
+        <mat-icon>star_border</mat-icon>
+    }
+}
   </p>
 
   <mat-chip-set>

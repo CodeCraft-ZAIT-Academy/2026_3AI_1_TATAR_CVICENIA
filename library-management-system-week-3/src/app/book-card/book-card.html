@@ -2,7 +2,15 @@
   <mat-card-header>
     <mat-card-title>{{ book().title }}</mat-card-title>
     <mat-card-subtitle>{{ book().author }}</mat-card-subtitle>
+      <span class="status" style="position: absolute; top: 8px; right: 8px;">
+        @if (book().available) {
+          <span class="available" style="color: green;">Dostupná</span>
+        } @else {
+          <span class="unavailable" style="color: red;">Nedostupná</span>
+        }
+      </span>
   </mat-card-header>
+
 
   <mat-card class="book-card" [class.unavailable]="!book().available">
 

@@ -72,4 +72,21 @@ export class BookList {
       this.currentPage++;
     }
   }
+
+  firstPage(): void {
+    this.currentPage = 1;
+  }
+
+  lastPage(): void {
+    this.currentPage = this.pageCount();
+  }
+
+  pages(): number[] {
+    const count = this.pageCount();
+    const pagesArray: number[] = [];
+    for (let i = 1; i <= count; i++) {
+      pagesArray.push(i);
+    }
+    return pagesArray;
+  }
 }
