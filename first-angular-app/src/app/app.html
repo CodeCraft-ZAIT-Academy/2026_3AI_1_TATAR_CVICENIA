@@ -1,0 +1,20 @@
+<h1>Moja prva angular aplikacia</h1>
+<p>Angular funguje!</p>
+<h1>{{title()}}</h1>
+
+<button (click)="consoleLog()">Zobrazit knihu</button>
+
+<ul>
+  @for (book of books; track book.id) {
+    <li>
+      @if (book.available == true) {
+        {{book.title}}, {{book.author}}, {{book.year}} - Dostupná
+      }
+      @else {
+        {{book.title}}, {{book.author}}, {{book.year}} - Nedostupná
+      }
+    </li>
+  } @empty {
+    <li>Žiadne knihy nie sú k dispozícii.</li>
+  }
+</ul>
