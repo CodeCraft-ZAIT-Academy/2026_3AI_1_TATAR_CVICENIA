@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Book } from '../book';
+import { Book } from '../../book';
 import { BookDetail } from '../book-detail/book-detail';
 
 @Component({
@@ -15,6 +15,8 @@ export class BookCard {
   book = input.required<Book>();
   borrowed = output<void>();
   returned = output<void>();
+  edited = output<void>();
+  deleted = output<number>();
 
   showDetails: boolean = false;
 
@@ -52,5 +54,17 @@ export class BookCard {
 
   giveBack(): void {
     this.returned.emit();
+  }
+
+  edit(): void {
+    this.edited.emit();
+  }
+
+  askDelete(): void {
+    
+  }
+
+  delete(): void {
+    this.deleted.emit(this.book().id);
   }
 }

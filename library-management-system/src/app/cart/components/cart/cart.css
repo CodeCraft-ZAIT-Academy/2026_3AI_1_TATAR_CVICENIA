@@ -31,3 +31,9 @@ mat-card-title {
   color: #64748b;
   font-style: italic;
 }
+
+mat-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
