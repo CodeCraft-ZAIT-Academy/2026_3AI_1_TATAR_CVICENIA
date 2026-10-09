@@ -11,7 +11,7 @@ import { BookCard } from '../book-card/book-card';
 
 @Component({
   selector: 'app-book-form',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatExpansionModule, BookCard],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatExpansionModule],
   templateUrl: './book-form.html',
   styleUrl: './book-form.css'
 })
@@ -46,4 +46,6 @@ export class BookForm {
       favorite: false
     };
   }
+
+
 }

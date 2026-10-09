@@ -12,6 +12,7 @@ import { BookDetail } from '../book-detail/book-detail';
   styleUrl: './book-card.css',
 })
 export class BookCard {
+  state: 'default' | 'editing' | 'deleting' = 'default';
   book = input.required<Book>();
   borrowed = output<void>();
   returned = output<void>();
@@ -61,7 +62,7 @@ export class BookCard {
   }
 
   askDelete(): void {
-    
+    this.state = 'deleting';
   }
 
   delete(): void {
