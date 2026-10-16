@@ -80,7 +80,7 @@ export class BookList {
 
   borrow(book: Book): void {
     if (!this.bookService.borrowBook(book.id)) {
-      alert(`Naraz môžeš mať požičaných najviac ${this.maxBorrowedBooks} kníh. Najskôr nejakú vráť.`);
+      alert('Knihu teraz nie je možné vypožičať. Skontroluj dostupnosť a limit výpožičiek.');
       return;
     }
     this.refreshBooks();

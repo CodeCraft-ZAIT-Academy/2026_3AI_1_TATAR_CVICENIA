@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Book } from '../../book';
 import { GENRES } from '../../genres';
 import { BookCard } from '../book-card/book-card';
+import { createEmptyBook } from '../../book.factory';
 
 @Component({
   selector: 'app-book-form',
@@ -25,11 +26,10 @@ export class BookForm {
   ratings: number[] = [1, 2, 3, 4, 5];
   currentYear: number = new Date().getFullYear();
 
-  draft: Book = this.emptyBook();
+  draft: Book = createEmptyBook();
 
   save(form: NgForm): void {
-    this.saved.emit({ ...this.draft });
-    this.draft = this.emptyBook();
+    this.draft = createEmptyBook();
     form.resetForm(this.draft);
   }
 

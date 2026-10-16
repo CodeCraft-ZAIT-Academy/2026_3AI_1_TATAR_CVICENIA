@@ -72,13 +72,7 @@ export class BookService {
     }
 
     borrowBook(id: number): boolean {
-        const book = this.books.find(book => book.id === id);
-
-        if (!book || !book.available) return false;
-
-        if (this.borrowedBooks().length >= this.maxBorrowed) {
-            return false;
-        }
+        if (!this.canBorrowBook(id)) return false;
 
         this.books = this.books.map(book =>
             book.id === id ? { ...book, available: false } : book
@@ -131,4 +125,27 @@ export class BookService {
 
         return result;
         }
+
+    //BONUS
+    countAvailableBooks(): number {
+        return this.books.filter(book => book.available).length;
+    }
+
+    countFavoriteBooks(): number {
+        return this.books.filter(book => book.favorite).length;
+    }
+
+    countAllBooks(): number {
+        return this.books.length;
+    }
+
+    getBookById(id: number): Book | undefined {
+        return this.books.find(book => book.id === id);
+    }
+
+    canBorrowBook(id: number): boolean {
+        const book = this.getBookById(id);
+        return !!book && book.available &&
+            this.borrowedBooks().length < this.maxBorrowed;
+    }
 }
