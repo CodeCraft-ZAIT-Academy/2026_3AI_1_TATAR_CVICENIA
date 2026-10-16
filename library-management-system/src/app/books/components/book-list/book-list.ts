@@ -28,7 +28,7 @@ export class BookList {
   
   ];
 
-  maxBorrowedBooks: number = this.bookService.maxBorrowed;
+  maxBorrowedBooks: number = this.bookService.maxBorrowedBooks;
 
   books: Book[] = this.bookService.getBooks();
 
