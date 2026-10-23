@@ -50,14 +50,14 @@
         <p>Kniha je momentálne vypožičaná.</p>
       }
 
-      @if (showDetails) {
+      @if (showDetails()) {
         <app-book-detail [book]="book()"></app-book-detail>
       }
     </mat-card-content>
 
     <mat-card-actions>
       <button matButton (click)="toggleDetails()">
-        @if (showDetails) {
+        @if (showDetails()) {
           Skryť detail
         } @else {
           Zobraziť detail
