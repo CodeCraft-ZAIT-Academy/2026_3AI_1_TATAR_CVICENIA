@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -23,80 +23,83 @@ import { BookService } from '../../book.service';
 })
 export class BookList {
   private bookService = inject(BookService);
+  readonly books = this.bookService.books;
+  readonly borrowedBooks = this.bookService.borrowedBooks;
+  readonly maxBorrowed = this.bookService.maxBorrowed;
+
+  readonly searchText = signal('');
+  readonly availability = signal('all');
+  readonly sortBy = signal('none');
 
   myBooks: Book[] = [
   
   ];
 
   maxBorrowedBooks: number = this.bookService.maxBorrowedBooks;
-
-  books: Book[] = this.bookService.getBooks();
-
-  currentPage: number = 1;
-  pageSize: number = 5;
-
-  searchText: string = '';
+  readonly currentPage = signal(1);
+  readonly pageSize = signal(5);
+  readonly pageSizes = [5, 10, 20];
+  
+ // searchText: string = '';
   filteredBooks(): Book[] {
-    if (!this.searchText.trim()) {
-      return this.books;
+    if (!this.searchText().trim()) {
+      return this.books();
     }
-    const query = this.searchText.toLowerCase();
-    return this.books.filter(
+    const query = this.searchText().toLowerCase();
+    return this.books().filter(
       (book) =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query)
     );
   }
 
-  pageCount(): number {
-    return Math.ceil(this.books.length / this.pageSize);
-  }
-
-  isOnCurrentPage(index: number): boolean {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return index >= start && index < start + this.pageSize;
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.pageCount()) {
-      this.currentPage++;
-    }
-  }
-
-  borrowedBooks(): Book[] {
-    return this.bookService.borrowedBooks();
-  }
+  readonly pageCount = computed(() =>
+    Math.max(1, Math.ceil(this.visibleBooks().length / this.pageSize()))
+  );
 
   giveBack(book: Book): void {
     this.bookService.returnBook(book.id);
-    this.refreshBooks();
   }
 
   borrow(book: Book): void {
     if (!this.bookService.borrowBook(book.id)) {
-      alert('Knihu teraz nie je možné vypožičať. Skontroluj dostupnosť a limit výpožičiek.');
-      return;
+      alert('Knihu teraz nie je možné vypožičať.');
     }
-    this.refreshBooks();
   }
   addBook(book: Book): void {
     this.bookService.addBook(book);
-    this.refreshBooks();
     this.firstPage();
   }
 
-  firstPage(): void {
-    this.currentPage = 1;
-  }
+  readonly firstShown = computed(() =>
+    (this.currentPage() - 1) * this.pageSize() + 1
+  );
+  readonly lastShown = computed(() =>
+    Math.min(this.currentPage() * this.pageSize(), this.visibleBooks().length)
+  );
+  readonly pages = computed(() =>
+    Array.from({ length: this.pageCount() }, (_, i) => i + 1)
+  );
 
-  lastPage(): void {
-    this.currentPage = this.pageCount();
+  firstPage(): void { this.currentPage.set(1); }
+  lastPage(): void { this.currentPage.set(this.pageCount()); }
+
+  previousPage(): void {
+    this.currentPage.update(p => Math.max(1, p - 1));
+  }
+  nextPage(): void {
+    this.currentPage.update(p => Math.min(this.pageCount(), p + 1));
+  }
+  goToPage(page: number): void {
+    this.currentPage.set(Math.max(1, Math.min(page, this.pageCount())));
+  }
+  setPageSize(size: number): void {
+    this.pageSize.set(size);
+    this.firstPage();
+  }
+  isOnCurrentPage(index: number): boolean {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return index >= start && index < start + this.pageSize();
   }
 
   editBook(book: Book): void {
@@ -105,25 +108,31 @@ export class BookList {
 
   deleteBook(deleted: Book): void {
     this.bookService.deleteBook(deleted.id);
-    this.refreshBooks();
-    if (this.currentPage > this.pageCount()) this.lastPage();
+    if (this.currentPage() > this.pageCount()) this.lastPage();
   }
 
+  
   updateBook(updated: Book): void {
     this.bookService.updateBook(updated);
-    this.refreshBooks();
   }
 
   clearSearch(): void {
-    this.searchText = '';
-  }
-
-  refreshBooks(): void {
-    this.books = this.bookService.getBooks();
+    this.searchText.set('');
+    this.firstPage();
   }
 
   toggleFavorite(book: Book): void {
     this.bookService.toggleFavorite(book.id);
-    this.refreshBooks();
   }
+
+  readonly visibleBooks = computed(() =>
+    this.bookService.getFilteredBooks(
+      this.searchText(),
+      this.availability(),
+      this.sortBy()
+    )
+  );
+
+  totalBooks = computed(() => this.books().length);
+  totalAvailableBooks = computed(() => this.bookService.countAvailableBooks());
 }

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,12 +20,25 @@ export class BookCard {
   edited = output<void>();
   deleted = output<number>();
 
-  showDetails: boolean = false;
+
+  readonly showDetails = signal(false);
+  readonly editing = signal(false);
+  readonly confirmingDelete = signal(false);
+
+  startEdit(): void { this.editing.set(true); }
+  /*saveEdit(book: Book): void {
+    this.edited.emit(book);
+    this.editing.set(false);
+  }*/
+
+  cancelEdit(): void { this.editing.set(false); }
+  askDelete(): void { this.confirmingDelete.set(true); }
+  cancelDelete(): void { this.confirmingDelete.set(false); }
+
 
   toggleDetails(): void {
-    this.showDetails = !this.showDetails;
+    this.showDetails.update(open => !open);
   }
-
   toggleFavorite(): void {
     this.book().favorite = !this.book().favorite;
   }
@@ -43,10 +56,6 @@ export class BookCard {
 
   edit(): void {
     this.edited.emit();
-  }
-
-  askDelete(): void {
-    this.state = 'deleting';
   }
 
   delete(): void {

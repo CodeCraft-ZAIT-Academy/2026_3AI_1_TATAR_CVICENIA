@@ -14,13 +14,16 @@
   <app-cart [books]="borrowedBooks()" (returned)="giveBack($event)"></app-cart>
 
   <h2>Zoznam kníh</h2>
-  <p>V knižnici je spolu {{ books.length }} kníh.</p>
+  <p>V knižnici je spolu {{ books().length }} kníh.</p>
 
   <mat-form-field class="search">
     <mat-label>Hľadať podľa názvu alebo autora</mat-label>
     <mat-icon matPrefix>search</mat-icon>
-    <input matInput name="search" [(ngModel)]="searchText" (ngModelChange)="firstPage()">
-    @if (searchText) {
+    <input matInput name="search"
+      [ngModel]="searchText()"
+      (ngModelChange)="searchText.set($event); firstPage()" />
+
+    @if (searchText()) {
       <button matIconButton matSuffix (click)="clearSearch()">
         <mat-icon>close</mat-icon>
       </button>
@@ -28,7 +31,7 @@
   </mat-form-field>
  
   @for (book of filteredBooks(); track book.id; let i = $index) {
-    @if (i >= (currentPage - 1) * pageSize && i < currentPage * pageSize) {
+    @if (i >= (currentPage() - 1) * pageSize() && i < currentPage() * pageSize()) {
       <app-book-card
         [book]="book"
         (borrowed)="borrow(book)"
@@ -40,14 +43,14 @@
   }
 
   <div class="pagination">
-    <button matButton="outlined" (click)="previousPage()" [disabled]="currentPage === 1">
+    <button matButton="outlined" (click)="previousPage()" [disabled]="currentPage() === 1">
       <mat-icon>chevron_left</mat-icon>
       Predošlá
     </button>
 
-    <span>Strana {{ currentPage }} z {{ pageCount() }}</span>
+    <span>Strana {{ currentPage() }} z {{ pageCount() }}</span>
 
-    <button matButton="outlined" (click)="nextPage()" [disabled]="currentPage === pageCount()">
+    <button matButton="outlined" (click)="nextPage()" [disabled]="currentPage() === pageCount()">
       Ďalšia
       <mat-icon iconPositionEnd>chevron_right</mat-icon>
     </button>
