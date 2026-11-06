@@ -1,0 +1,9 @@
+@if (book(); as book) {
+  <h1>{{ book.title }}</h1>
+  <app-book-detail [book]="book"></app-book-detail>
+  <a matButton routerLink="/books">
+    Späť na zoznam kníh
+  </a>
+} @else {
+  <p>Kniha s číslom {{ id() }} v knižnici neexistuje.</p>
+}

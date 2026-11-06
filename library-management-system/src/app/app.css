@@ -22,3 +22,30 @@ h1 {
   background-color: #1f3a5f;
   color: white;
 }
+
+a {
+  width: 25px;
+  height: 25px;
+  color: white;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+a.active {
+  padding: 4px 12px;
+  background-color: #857ef7;
+  border-radius: 90px;
+}
+
+a:hover {
+  transform: scale(1.2);
+}
+
+.navigation {
+  position: static;
+  margin-left: auto;
+  right: 0;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}

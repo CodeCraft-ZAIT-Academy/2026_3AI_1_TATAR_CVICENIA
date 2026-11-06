@@ -1,18 +1,4 @@
 <section>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>add</mat-icon>
-          Pridať novú knihu
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-book-form (saved)="addBook($event)"></app-book-form>
-    </mat-expansion-panel>
-  </mat-accordion>
-
-  <app-cart [books]="borrowedBooks()" (returned)="giveBack($event)"></app-cart>
-
   <h2>Zoznam kníh</h2>
   <p>V knižnici je spolu {{ books().length }} kníh.</p>
 

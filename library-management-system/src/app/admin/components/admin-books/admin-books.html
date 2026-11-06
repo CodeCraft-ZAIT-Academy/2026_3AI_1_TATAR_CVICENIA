@@ -1,0 +1,19 @@
+@for (book of books(); track book.id) {
+  <tr>
+    <td>{{ book.id }}</td>
+    <td><a [routerLink]="['/books', book.id]">{{ book.title }}</a></td>
+    <td>{{ book.author }}</td>
+    <td>{{ book.genre }}</td>
+    <td>{{ book.available ? 'Dostupná' : 'Vypožičaná' }}</td>  
+    <td>
+      @if (confirmingDeleteId() === book.id) {
+        Naozaj zmazať?
+        <button matButton (click)="cancelDelete()">Nie</button>
+        <button matButton="filled" (click)="confirmDelete(book)">Áno</button>
+      } @else {
+        <a matIconButton [routerLink]="['/admin', book.id, 'edit']" aria-label="Upraviť"><mat-icon>edit</mat-icon></a>
+        <button matIconButton (click)="askDelete(book)" aria-label="Zmazať"><mat-icon>delete</mat-icon></button>
+      }
+    </td>
+  </tr>
+}

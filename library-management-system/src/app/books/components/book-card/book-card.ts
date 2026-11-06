@@ -5,10 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { Book } from '../../book';
 import { BookDetail } from '../book-detail/book-detail';
 import { getGenreColor } from '../../genre-colors';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-book-card',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, BookDetail],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, BookDetail, RouterLink],
   templateUrl: './book-card.html',
   styleUrl: './book-card.css',
 })
